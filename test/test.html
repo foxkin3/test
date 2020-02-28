@@ -1,0 +1,394 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Fighting - HTML5</title>
+<body onkeydown="javascript:keyPress(event);" onkeyup="javascript:keyRelease(event);"  >
+<div id="gameContainer">
+<canvas id="gameCanvas" width="1024" height="500">
+</canvas>
+</div>
+
+</body>
+</html>
+
+<script>
+ function  RemoveArray(array,attachId )
+{
+     for ( var  i = 0 ,n = 0 ;i < array.length;i ++ )
+     {
+         if (array[i] != attachId)
+         {
+            array[n ++ ] = array[i]
+        }
+    }
+    array.length  -=   1 ;
+} 
+
+ Array.prototype.remove  =   function  (obj)  {
+     return  RemoveArray( this,obj );
+} ; 
+	var $ = function(id){
+		return "string"==typeof(id) ? document.getElementById(id) : id ;
+	}
+
+	   
+var inputFlag = {
+    right    : false,
+    up        : false,
+    left    : false,
+    down    : false,
+    quick    : false,
+	keyDown : false,
+	quik : false,
+	 addblood : false,
+     fire : false
+};
+var KEY = { D: 68, W: 87, A: 65, S:83, DOWN:40, RIGHT:39, UP:38, LEFT:37, QUICK:88,ADDBLOOD:90,FIRE:17};
+//按键按下相应动作修改
+var keyPress = function(event){
+
+    inputFlag.keyDown = true;
+    var code = event.keyCode || window.event;
+
+    switch(code) {
+        case KEY.RIGHT:
+        case KEY.D: inputFlag.right = true; break;
+        case KEY.UP:
+        case KEY.W: inputFlag.up = true; break;
+        case KEY.LEFT:
+        case KEY.A: inputFlag.left = true; break;
+        case KEY.DOWN:
+        case KEY.S: inputFlag.down = true; break;
+		case KEY.QUICK:inputFlag.quik = true; break;
+        case KEY.ADDBLOOD:inputFlag.addblood = true; break;
+		case KEY.FIRE:inputFlag.fire = true; break;
+        
+    }
+};
+
+var keyRelease = function(event) {
+	    inputFlag.keyDown = false;
+    var code = event.keyCode || window.event;
+    switch(code) {
+        case KEY.RIGHT:
+        case KEY.D: inputFlag.right = false; break;
+        
+        case KEY.UP:
+        case KEY.W: inputFlag.up = false; break;
+        
+        case KEY.LEFT:
+        case KEY.A: inputFlag.left = false; break;
+        
+        case KEY.DOWN:
+        case KEY.S: inputFlag.down = false; break;
+       	case KEY.QUICK:inputFlag.quik = false; break;
+		case KEY.ADDBLOOD:inputFlag.addblood = false; break;
+        case KEY.FIRE:inputFlag.fire = false; break;
+        
+   
+    }
+};
+
+
+   var westCowBoy = {
+	       arrayBullet :new Array(),
+		   gridSize:50,
+		   x : 100,
+           y  : 100, 
+		   picSN : 0,
+		   diffX : 1,
+		   diffY : 1 ,
+		   direction : 3 ,
+		   r : 20,
+		   isCollect : false,
+		   bloodValue:200,
+		   bcount:0,
+		   cowboyPicSRC : "http://hi.csdn.net/attachment/201112/17/65387_1324102531Z4He.png",
+		   cowboyPicObj : "", 
+	       init: function(){
+			     var img=new Image();
+                img.src=this.cowboyPicSRC;
+                this.cowboyPicObj=img;
+			   },
+	        move : function(){
+				
+		   if(inputFlag.quik){
+			   this.diffX = 4;
+			   this.diffY = 4;
+			   }else{
+				this.diffX = 1;
+			   this.diffY = 1;
+			      
+				   }
+		if(inputFlag.addblood){
+			  this.bloodValue++;
+			}
+			  if(this.bloodValue>0){
+				if (inputFlag.right) this.x += this.diffX;
+                if (inputFlag.left)   this.x -= this.diffX;
+                if (inputFlag.down)   this.y += this.diffY;
+                if (inputFlag.up)    this.y -= this.diffY;
+		      
+				  }
+			
+			  var c=$("gameCanvas");
+              var cxt=c.getContext("2d"); 
+              
+	   
+		if(!westCowBoy.isCollect&& westCowBoy.bloodValue>0){
+                           if(inputFlag.fire==true){
+		                         
+								 var bullet = new Bullet();					   
+							      bullet.x = westCowBoy.x;
+								  bullet.y = westCowBoy.y;
+							      if(this.direction==3){
+									  bullet.direction = 3;
+								  }else if(this.direction==4){
+									  bullet.direction = 4;										
+								  }
+								   bullet.init();
+								  
+								  this.arrayBullet[this.bcount++] = bullet;	  
+							   }
+			               for(var i = 0 ;i <  this.arrayBullet.length;i++){
+						          alert(this.arrayBullet[i]);
+								   this.arrayBullet[i].move();
+							      var isHit =  this.arrayBullet[i].hit();
+							       var bullet = this.arrayBullet[i];
+								   if(isHit){
+									 this.arrayBullet.remove(bullet);
+										   }
+									  
+									 
+							   }
+						   
+						   if(inputFlag.right==true){
+								  this.direction = 4;
+								cxt.drawImage(this.cowboyPicObj,this.gridSize*this.picSN,this.gridSize*this.direction,this.gridSize,this.gridSize,this.x,this.y,this.gridSize,  this.gridSize);    
+								
+								
+							}else  if(inputFlag.left==true){
+								  this.direction = 3;
+								cxt.drawImage(this.cowboyPicObj,this.gridSize*this.picSN,this.gridSize*this.direction,this.gridSize,this.gridSize,this.x,this.y,this.gridSize,  this.gridSize);    
+							  }else if(inputFlag.up){
+								  cxt.drawImage(this.cowboyPicObj,this.gridSize*this.picSN,this.gridSize*this.direction,this.gridSize,this.gridSize,this.x,this.y,this.gridSize,  this.gridSize);    
+								  
+							 }else if(inputFlag.down){
+								  cxt.drawImage(this.cowboyPicObj,this.gridSize*this.picSN,this.gridSize*this.direction,this.gridSize,this.gridSize,this.x,this.y,this.gridSize,  this.gridSize);    
+								  
+							 }
+							 else{
+								 cxt.drawImage(this.cowboyPicObj,this.gridSize*3,this.gridSize*this.direction,this.gridSize,this.gridSize,this.x,this.y,this.gridSize,  this.gridSize);    
+								 }	
+							
+
+			}
+			
+			if(westCowBoy.bloodValue==0){
+								 cxt.drawImage(this.cowboyPicObj,this.gridSize*4,this.gridSize*3,this.gridSize,this.gridSize,this.x,this.y,this.gridSize,  this.gridSize);    
+				
+				}
+	    cxt.font="10px Arial";
+        cxt.fillStyle="#6600FF";  
+        cxt.fillText("Life:"+this.bloodValue,this.x+this.r*2,this.y+this.r);        
+   
+             
+	   this.picSN+=1;
+	   if(this.picSN>=4) 
+		 this.picSN=0;
+	  
+			  
+		  } 
+		  
+
+	   }
+
+	 function Bullet(){
+		  this.x = 0;
+		  this.y = 0;
+		  this.diffX = 10;
+		  this.direction = 3;   
+		  this.init  = function(){
+			  if(this.direction==3){
+			        this.diffX = -10;	  
+				  }else{
+					  this.diffX = 10;	  
+					  }
+			  }
+		  this.move = function(){
+					var c=$("gameCanvas");
+					var cxt=c.getContext("2d"); 
+					cxt.beginPath();
+				
+					cxt.fillStyle = "#000000";  
+					cxt.arc(this.x+20,this.y+20,1,0,Math.PI * 2,true);
+					
+					cxt.closePath();
+					
+					cxt.fill();    
+					this.x += this.diffX;
+				}					  
+			this.hit = function(){
+				  for(var i = 0; i <arrEnemy.length;i++){
+
+					  if(this.x>(arrEnemy[i].x+15)&&this.y>arrEnemy[i].y&&this.x<(arrEnemy[i].x+35)&&this.y<arrEnemy[i].y+50){
+						   arrEnemy[i].bloodValue--;
+                           return true;    						     
+						  }
+					  }
+					  return false;
+				}
+		  
+		 }
+	 function enemy() {
+	   this.x = 0;
+	   this.y = 0;
+	   this.gridSize=50;
+	   this.picSN = 0;
+	   this.diffX = 1;
+	    this.diffY = 1 ;
+		this.direction=0;
+		this.movedirection =0;
+		this.bloodValue = 100;
+		this.cowboyPicSRC = "http://hi.csdn.net/attachment/201112/17/65387_1324102531Z4He.png";
+		this.r = 20;
+		this.cowboyPicObj = "";
+		  this.init= function(){
+			     var img=new Image();
+                img.src=this.cowboyPicSRC;
+                this.cowboyPicObj=img;
+			   };
+			       this.move = function(){
+			  this.direction = parseInt( Math.random()*3);
+               var c=$("gameCanvas");
+              var cxt=c.getContext("2d"); 
+             if(this.bloodValue>0){
+				cxt.drawImage(this.cowboyPicObj,this.gridSize*this.picSN,this.gridSize*this.direction,this.gridSize,this.gridSize,this.x,this.y,this.gridSize,  this.gridSize);    
+			   
+		     }else{
+				cxt.drawImage(this.cowboyPicObj,this.gridSize*4,this.gridSize*0,this.gridSize,this.gridSize,this.x,this.y,this.gridSize,  this.gridSize);    
+			    
+				 }
+				 
+				  
+			  var dl = Math.sqrt((westCowBoy.x-this.x)*(westCowBoy.x-this.x) + (westCowBoy.y-this.y)*(westCowBoy.y-this.y));
+			  var dr = Math.sqrt(this.r*this.r+this.r*this.r);
+			  if(westCowBoy.bloodValue>0){
+				  
+			  if(dl<dr&&this.bloodValue>0){
+				    
+			  cxt.drawImage(westCowBoy.cowboyPicObj,westCowBoy.gridSize*westCowBoy.picSN,westCowBoy.gridSize*5,westCowBoy.gridSize,westCowBoy.gridSize,westCowBoy.x,westCowBoy.y,westCowBoy.gridSize,  westCowBoy.gridSize);    
+			    westCowBoy.bloodValue--;
+				this.bloodValue--;
+				
+				
+				
+				cxt.beginPath();
+				
+				for(var i = 0 ; i < 10;i++){
+				var dptx = Math.random()*30-30;
+				var dpty = Math.random()*30-30;				
+                
+				
+				cxt.fillStyle = "#FF0000";  
+				cxt.arc((westCowBoy.x+westCowBoy.gridSize/2)+dptx,(westCowBoy.y+westCowBoy.gridSize/2)+dpty,1,0,Math.PI * 2,true);
+				cxt.closePath();
+				
+				cxt.fill();
+				
+				
+				
+			  }
+			  	cxt.beginPath();
+			
+			  for(var i = 0 ; i < 10;i++){
+				
+			    cxt.fillStyle = "#00FFFF";  
+				cxt.arc((this.x+this.gridSize/2)+dptx,(this.y+this.gridSize/2)+dpty,1,0,Math.PI * 2,true);
+				
+				cxt.closePath();
+				
+				cxt.fill();    
+		      }
+			  
+			  isExitsCollect = true;
+				}
+		  }
+		  if(this.bloodValue>0){
+			   this.movedirection = parseInt( Math.random()*5);
+			   switch(this.movedirection){
+				   case 0:
+				    this.x += this.diffX;
+				     break;
+				   case 1:
+				    this.x -= this.diffX;				   
+				     break;
+				   case 2:
+				    this.y += this.diffY;				   
+				     break;
+				   case 3:
+				    this.y -= this.diffY;				   
+				     break;					 					 					 
+				   }
+				   
+			  this.picSN+=1;
+			  if(this.picSN>=4) 
+			     this.picSN=0;
+			  
+			  }
+			  
+		cxt.font="10px Arial";
+        cxt.fillStyle="#6600FF";  
+        cxt.fillText("Life:"+this.bloodValue,this.x+this.r*2,this.y+this.r);        
+        
+} 
+	      
+	};
+	
+	 function start(){
+		 	var c=$("gameCanvas");
+            var cxt=c.getContext("2d"); 
+            cxt.clearRect(0,0,c.width, c.height);
+
+		 westCowBoy.move();
+     	 for(var i = 0;i<10;i++){
+ 	        arrEnemy[i].move();
+		 }	
+		 if(isExitsCollect){
+			 westCowBoy.isCollect = true; 
+			 }else{
+				 westCowBoy.isCollect = false; 
+				 }
+			 
+			 isExitsCollect = false; 
+		 } 
+   westCowBoy.init();
+   
+   var arrEnemy = [];
+   var isExitsCollect = false;
+		
+   for(var i = 0;i<10;i++){
+	var ev =  new enemy();
+	   ev.init();
+	   ev.x = i*40+10;
+	   ev.y = 100;
+       arrEnemy[i] = ev; 
+   }
+   
+   
+      
+   var initLoad = function(){
+	      
+		  setInterval("start()",100);
+	   }
+	   
+	 window.onload=function(){
+          
+		  initLoad();    
+      };
+</script>
+
+
+ 

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>欢迎光临</title>
+		<script>
+			function dl(){
+				var zh=document.getElementById("zh");
+				var mm=document.getElementById("mm");
+				if(zh.value==""){
+					alert("请输入账号");
+				}else if(mm.value==""){
+					alert("请输入密码");
+				}else if(zh.value=="fox"&&mm.value=="123456"){
+					window.location.href="welcome.html";
+				}else{
+					alert("请输入正确的账号和密码!")
+				}
+			}
+		</script>
+		<style>
+			video{
+			position: fixed;
+				right: 0;
+				bottom: 0;
+				min-width: 100%;
+				min-height: 100%;
+				width: auto;
+				height: auto;
+				z-index: -9999;/* 视频充满整个页面 */
+			}
+			#logo{
+				margin-top: 22px;
+			}
+			img{
+				width: 133px;
+				margin-top:-20px;
+			}
+			#div1{
+				width: 400px;
+				height: 260px;
+				padding: 13px;
+				
+				position: absolute;
+				left: 50%;
+				top: 50%;
+				margin-top: -200px;
+				margin-left: -200px;
+				background-color: rgba(240,255,255,0.5);
+				border-radius: 10px;
+				text-align: center;/* 表单大小，颜色，背景颜色 */
+			}
+			.text1{
+				width: 278px;
+				height: 28px;
+				border-top-right-radius: 10px;
+				border-top-left-radius: 10px;
+				border-bottom-left-radius: 10px;
+				border-bottom-right-radius: 10px;
+				border: 2px solid rgba(172, 172, 172, 51);
+				background: transparent;
+			}
+			form p>*{
+				display: inline-block;
+				vertical-align: middle;
+			}
+			#wj{
+				font-size: 17px;
+				color: white;
+				text-decoration: none;
+				position: relative;
+				float: right;
+				top: 5px;
+			}
+			#wj:hover{
+				color: bule;
+				text-decoration: underline;
+			}
+			.shurukuang{
+				font-size: 14px;
+				font-family: 行楷;
+				width: 70px;
+				height: 28px;
+				line-height: 28px;
+				text-align: center;
+				color: white;
+				background-color: #3cd8ff;
+				border-top-left-radius: 10px;
+				border-bottom-left-radius: 10px;
+				border-top-right-radius: 10px;
+				border-bottom-right-radius: 10px;
+			}
+			#div2{
+				padding: 0 28px;
+			}
+			#dl1{
+				font-size: 14px;
+				font-family: 宋体;
+				width: 120px;
+				height: 28px;
+				line-height: 28px;
+				text-align: center;
+				color: white;
+				background-color: #30ffe0;
+				border-radius: 6px;
+				border: 0;
+				float: left;
+			}
+			#div6{
+				position: fixed;
+				bottom: 50px;
+				width: 420px;
+				margin: 0 auto;
+				text-align: center;
+			}
+			#banq{
+				font-size: 20px;
+				color: #FFFFFF;
+			}
+		</style>
+	</head>
+	<body>
+		<video style="width: 100%;" autoplay="autoplay" loop="loop" poster="img/fm.png">
+			<source src="video/1.mp4"></source>
+		</video><!-- 视频链接 -->
+		
+		<div id="div1"><!-- 登陆表单 -->
+			<p id="logo"><img src="img/lol.png"/></p>
+			<form action="welcome.html" method="post">
+				<p><label class="shurukuang">账&nbsp;&nbsp;&nbsp;号:&nbsp;&nbsp;&nbsp;</label><input type="text" id="zh" class="text1" style="outline: none;" /></p>
+				<p><label class="shurukuang">密&nbsp;&nbsp;&nbsp;码:&nbsp;&nbsp;&nbsp;</label><input type="password" id="mm" class="text1"  style="outline: none;" /></p>
+				<div id="div2">
+					<input style="outline: none;" type="button" id="dl1" value="登&nbsp陆" onclick="dl()";/>
+					<a id="wj" href="wangji.html">忘记密码？</a>
+				</div>	
+			</form><div id="div6">
+			<hr /><br />
+			<p id="banq">&copy; CopyRight By 20183335 软件二班 黎仁涛 </p>
+		</div>
+		</div>
+		
+	</body>
+</html>
